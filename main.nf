@@ -1,6 +1,6 @@
-params.input = "${projectDir}/input.csv"
-params.num_lines = 2
-params.outdir = './results'
+#!/usr/bin/env nextflow
+
+nextflow.enable.dsl = 2
 
 process tailInput {
 
@@ -9,7 +9,7 @@ process tailInput {
     container 'ubuntu:20.04'
 
     input:
-    path input
+    path csv
     val num_lines
 
     output:
@@ -17,8 +17,8 @@ process tailInput {
 
     script:
     """
-    head -n 1 $input > output.csv
-    cat $input | tail -n $num_lines >> output.csv
+    head -n 1 $csv > output.csv
+    cat $csv | tail -n $num_lines >> output.csv
     """
 }
 
