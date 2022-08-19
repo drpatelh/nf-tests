@@ -2,6 +2,8 @@
 
 POC to highlight how to run Python scripts within a Nextflow pipeline.
 
+> **NOTE**: Change `--outdir` to an absolute path if running in the Cloud e.g. `--outdir 's3://mybucket/nf-tests/results'` (default : `./results`)
+
 ## Run directly
 
 - Run with `docker`:
