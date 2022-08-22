@@ -7,7 +7,7 @@ POC to debug `toAbsolutePath() on null object` error reported on [nf-core Slack]
 ```
 $ mkdir -p input/sgRNA_pools/
 $ touch input/sgRNA_pools/Pool_1.csv  
-$touch input/sgRNA_pools/Pool_2.csv
+$ touch input/sgRNA_pools/Pool_2.csv
 ```
 
 ## Run directly
