@@ -2,51 +2,45 @@
 
 nextflow.enable.dsl = 2
 
-process tailInput {
+Channel
+    .fromPath("${projectDir}/input/sgRNA_pools/Pool*.csv")
+    .map {
+        [
+            it.toString().replaceAll("(.*)/sgRNA_pools/(.*).csv", "\$2"),
+            it
+        ]
+    }
+    .dump(tag: 'pools')
+    .set { ch_pools }
 
-    publishDir "${params.outdir}/tail", mode: 'copy'
+process REFORMAT_POOL {
 
-    container 'ubuntu:20.04'
+    tag { pool }
+
+    executor "local"
 
     input:
-    path csv
-    val num_lines
+    tuple val(pool), path(csv)
 
     output:
-    path "*.csv"
-
+    tuple val(pool), path("*control.txt")
+        
     script:
     """
-    head -n 1 $csv > output.csv
-    cat $csv | tail -n $num_lines >> output.csv
-    """
-}
-
-process summarizeInput {
-
-    publishDir "${params.outdir}/summarize", mode: 'copy'
-
-    // See: https://quay.io/repository/biocontainers/pandas?tag=latest&tab=tags
-    container 'quay.io/biocontainers/pandas:1.1.5'
-
-    input:
-    path csv
-
-    output:
-    path "summary.csv"
-
-    script: 
-    // `summarize.py` can be found in the bin/ directory in the root of the repo
-    // Nextflow will automatically load this into $PATH when running the pipeline
-    // Ensure the first line of this script is a shebang - in this case for Python i.e. `#!/usr/bin/env python3`
-    """
-    summarize.py $csv
+    cat "${csv}" \
+        | grep -i nonTarget \
+        | awk -F "," '{ print \$1 }' \
+        | sort \
+        | uniq \
+        > "${pool}_control.txt"
     """
 }
 
 workflow {
 
-    ch_input = file(params.input, checkIfExists: true)
-    tailInput(ch_input, params.num_lines) | summarizeInput
+      REFORMAT_POOL ( ch_pools )
 
+      REFORMAT_POOL
+        .out
+        .view()
 }

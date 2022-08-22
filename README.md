@@ -1,15 +1,21 @@
-# Running Python in Nextflow
+# Debug `toAbsolutePath()` error
 
-POC to highlight how to run Python scripts within a Nextflow pipeline.
+POC to debug `toAbsolutePath() on null object` error reported on [nf-core Slack](https://nfcore.slack.com/archives/D0336TKDEQY/p1661180251769559)
 
-> **NOTE**: Change `--outdir` to an absolute path if running in the Cloud e.g. `--outdir 's3://mybucket/nf-tests/results'` (default : `./results`)
+## Create test files
+
+```
+$ mkdir -p input/sgRNA_pools/
+$ touch input/sgRNA_pools/Pool_1.csv  
+$touch input/sgRNA_pools/Pool_2.csv
+```
 
 ## Run directly
 
 - Run with `docker`:
 
 ```
-nextflow run drpatelh/nf-tests -profile docker -r python
+nextflow run drpatelh/nf-tests -profile docker -r crispr
 ```
 
 ## Run locally
@@ -19,7 +25,7 @@ nextflow run drpatelh/nf-tests -profile docker -r python
 ```
 git clone https://github.com/drpatelh/nf-tests.git
 cd nf-tests
-git checkout python
+git checkout crispr
 ```
 
 - Run with `docker`:
