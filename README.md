@@ -1,15 +1,15 @@
-# Running Python in Nextflow
+# Tower Run URL within Workflow
 
-POC to highlight how to run Python scripts within a Nextflow pipeline.
+POC to highlight how to obtain Tower URL for a run from within a running Workflow.
 
-> **NOTE**: Change `--outdir` to an absolute path if running in the Cloud e.g. `--outdir 's3://mybucket/nf-tests/results'` (default : `./results`)
+The script parses the `workflow.workDir` variable to get the run id.
 
 ## Run directly
 
 - Run with `docker`:
 
 ```
-nextflow run drpatelh/nf-tests -profile docker -r python
+nextflow run drpatelh/nf-tests -profile docker -r runid
 ```
 
 ## Run locally
@@ -19,7 +19,7 @@ nextflow run drpatelh/nf-tests -profile docker -r python
 ```
 git clone https://github.com/drpatelh/nf-tests.git
 cd nf-tests
-git checkout python
+git checkout runid
 ```
 
 - Run with `docker`:
