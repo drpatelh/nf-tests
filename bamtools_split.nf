@@ -7,7 +7,7 @@ process BAMTOOLS_SPLIT {
     path bam
 
     output:
-   	path "*.bam", emit: bam
+    path "*.bam", emit: bam
 
     script:
     """
