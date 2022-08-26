@@ -2,19 +2,20 @@
 
 nextflow.enable.dsl = 2
 
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
-include { ECHO_PATH as ECHO_PATH_1 } from './echo_path'
-include { ECHO_PATH as ECHO_PATH_2 } from './echo_path'
+include { STAGE_FILES    } from './stage_files'
+include { BAMTOOLS_SPLIT } from './bamtools_split'
 
 workflow {
 
-    ECHO_PATH_1 (
-        ch_input
+    STAGE_FILES ()
+
+    BAMTOOLS_SPLIT (
+        STAGE_FILES.out.bam
     )
 
-    ECHO_PATH_2 (
-        ch_input
-    )
+    BAMTOOLS_SPLIT
+        .out
+        .bam
+        .view()
 
 }
