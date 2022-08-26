@@ -2,7 +2,7 @@ process STAGE_FILES {
     container "quay.io/biocontainers/wget:1.20.1"
 
     output:
-   	path "*.bam", emit: bam
+    path "*.bam", emit: bam
 
     script:
     """
