@@ -2,13 +2,13 @@ process ECHO_PATH {
 
     debug true
 
-    container 'ubuntu:20.04'
+    container 'ubuntu:latest'
 
     input:
     path input
 
     script:
     """
-    echo $input
+    ls -la $input/*
     """
 }
