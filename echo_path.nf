@@ -5,10 +5,10 @@ process ECHO_PATH {
     container 'ubuntu:20.04'
 
     input:
-    path input
+    path ('dir??/*')
 
     script:
     """
-    echo $input
+    ls -la *
     """
 }
