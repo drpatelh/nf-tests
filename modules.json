@@ -1,0 +1,15 @@
+{
+    "name": "drpatelh/nf-tests",
+    "homePage": "https://github.com/drpatelh/nf-tests",
+    "repos": {
+        "nf-core/modules": {
+            "git_url": "https://github.com/nf-core/modules.git",
+            "modules": {
+                "gatk4/baserecalibrator": {
+                    "branch": "master",
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
+                }
+            }
+        }
+    }
+}

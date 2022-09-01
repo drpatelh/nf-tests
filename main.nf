@@ -2,19 +2,24 @@
 
 nextflow.enable.dsl = 2
 
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
-include { ECHO_PATH as ECHO_PATH_1 } from './echo_path'
-include { ECHO_PATH as ECHO_PATH_2 } from './echo_path'
+include { GATK4_BASERECALIBRATOR } from './modules/nf-core/modules/gatk4/baserecalibrator/main'
 
 workflow {
 
-    ECHO_PATH_1 (
-        ch_input
-    )
+    input = [ 
+        [ id:'test' ],
+        file(params.bam, checkIfExists: true),
+        file(params.bai, checkIfExists: true),
+        []
+    ]
 
-    ECHO_PATH_2 (
-        ch_input
+    GATK4_BASERECALIBRATOR (
+        input,
+        params.fasta,
+        params.fai,
+        params.dict,
+        params.sites_vcfs ? params.sites_vcfs.tokenize(',').collect { file(it) } : [],
+        params.sites_tbis ? params.sites_tbis.tokenize(',').collect { file(it) } : []
     )
 
 }
