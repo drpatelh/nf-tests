@@ -1,20 +1,43 @@
 #!/usr/bin/env nextflow
 
-nextflow.enable.dsl = 2
+nextflow.enable.dsl=2
 
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+println """\
+         ===================================
+         P P I - P R E D I C T - N F   P I P E L I N E    
+         ===================================
+          interactions:   ${params.interactions}
+          embeddings:     ${params.embeddings}
+          weights:        ${params.weights}
+          s3_publish:     ${params.s3_publish}
+         """
+         .stripIndent()
 
-include { ECHO_PATH as ECHO_PATH_1 } from './echo_path'
-include { ECHO_PATH as ECHO_PATH_2 } from './echo_path'
+
+process PredictPPI {
+    publishDir(
+        path: "${params.s3_publish}",
+        mode: 'copy',
+    )
+    accelerator 1
+    input:
+    tuple path(interactions), path(embeddings), path(weights)
+    
+    output:
+    path "*"
+
+    script:
+    """
+    conda run -n ppi_prediction /app/predict_parameterized.py \
+    -interactions $interactions \
+    -embeddings $embeddings \
+    -weights $weights
+    """
+}
 
 workflow {
-
-    ECHO_PATH_1 (
-        ch_input
-    )
-
-    ECHO_PATH_2 (
-        ch_input
-    )
-
+    Channel.fromPath(params.index) \
+        | splitCsv(header:true) \
+        | map { row -> [row.interactions, row.embeddings, row.weights] } \
+        | PredictPPI
 }
