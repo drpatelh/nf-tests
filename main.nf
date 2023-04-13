@@ -8,8 +8,8 @@ process FOO {
 
     exec:
     def contents = 'bar'
-    def out_file = task.workDir.resolve("foo.txt")
-    out_file.text = contents
+    // def out_file = task.workDir.resolve("foo.txt")
+    // out_file.text = contents
 }
 
 workflow {
