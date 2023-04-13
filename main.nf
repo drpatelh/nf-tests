@@ -2,19 +2,18 @@
 
 nextflow.enable.dsl = 2
 
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
-include { ECHO_PATH as ECHO_PATH_1 } from './echo_path'
-include { ECHO_PATH as ECHO_PATH_2 } from './echo_path'
+include { PREPARE_GENOME } from './subworkflows/local/prepare_genome'
 
 workflow {
 
-    ECHO_PATH_1 (
-        ch_input
-    )
+    PREPARE_GENOME ()
 
-    ECHO_PATH_2 (
-        ch_input
-    )
+    // FASTQ_ALIGN_BOWTIE2 (
+    //         ch_variants_fastq,
+    //         PREPARE_GENOME.out.bowtie2_index.collect(),
+    //         params.save_unaligned,
+    //         false,
+    //         PREPARE_GENOME.out.fasta.collect()
+    //     )
 
 }
