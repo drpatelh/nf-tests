@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
 
+nextflow.enable.dsl = 2
+
 process TSV_FROM_LIST {
     executor 'local'
 
@@ -12,7 +14,7 @@ process TSV_FROM_LIST {
     exec:
     def contents = ""
     if (tsv_data.size() > 0) {
-        contents += tsv_data.each { it.join('\t') }.join('\n')
+        contents += tsv_data.join('\n')
     }
 
     def out_file = task.workDir.resolve("test.tsv")
