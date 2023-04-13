@@ -1,18 +1,24 @@
 #!/usr/bin/env nextflow
 
-process foo {
+process TSV_FROM_LIST {
     executor 'local'
 
-    debug true
-    
-    input: 
-    path x
-    
-    """
-    echo $x
-    """
+    input:
+    val tsv_data // [ 'foo', 'bar' ]
+
+    output:
+    path "*.tsv"
+
+    exec:
+    def contents = ""
+    if (tsv_data.size() > 0) {
+        contents += tsv_data.each { it.join('\t') }.join('\n')
+    }
+
+    def out_file = task.workDir.resolve("test.tsv")
+    out_file.text = contents
 }
 
 workflow {
-    Channel.fromPath('s3://rnaseq-nf/data/ggal/transcript.fa') | foo 
+    Channel.of( 'foo', 'bar' ) | collect | TSV_FROM_LIST
 }
