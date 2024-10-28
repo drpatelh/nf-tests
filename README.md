@@ -1,2 +1,2 @@
 # nf-tests
-Repo to test NF / Tower code 
+Repo to test NF code 
